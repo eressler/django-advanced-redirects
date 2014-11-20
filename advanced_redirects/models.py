@@ -1,8 +1,9 @@
 from django.db import models
-from seo_redirects import settings
+
+from . import settings
 
 
-class SeoRedirect (models.Model):
+class Redirect (models.Model):
     """
     Store page paths that require redirects to new pages.
     """
@@ -18,9 +19,10 @@ class SeoRedirect (models.Model):
         max_length=1000,
         blank=True,
         null=True,
-        help_text='Optional. Specify the to which the originating URL should redirect. This should be an absolute or root-relative URL.'
+        help_text='Optional. Specify the URL to which the originating URL should redirect. This should be an absolute or root-relative URL.'
     )
     redirect_type = models.CharField(
+        max_length=10,
         choices=settings.REDIRECT_CHOICES,
         default=settings.REDIRECT_CHOICES[0][0]
     )
