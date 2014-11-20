@@ -1,8 +1,9 @@
+import pdb
 from django import http
 from django.conf import settings
 from django.utils.timezone import now
 
-from .models import Redirect
+from .models import Redirect, Referral
 from . import settings as redirect_settings
 
 
@@ -66,15 +67,18 @@ class AdvancedRedirectkMiddleware(object):
         if not redirect:
             # no existing redirect yet, create it now with the original path that was hit
             redirect = Redirect(originating_url=full_path)
+            redirect.save()
 
-            # if default 404 redirect is specified, do a temporary redirect
-            if redirect_settings.DEFAULT_404_REDIRECT:
-                return http.HttpResponseRedirect(redirect_settings.DEFAULT_404_REDIRECT)
+        # check for the referer to store a referral
+        referer = request.META.get('HTTP_REFERER', redirect_settings.REFERER_NONE_VALUE)
+        referral, created = Referral.objects.get_or_create(referer_url=referer, redirect=redirect)
+        referral.hits += 1
+        referral.last_hit = now()
+        referral.save()
 
-        # update the redirect with updated information and return the standard 404 page
-        redirect.hits += 1
-        redirect.last_hit = now()
-        redirect.save()
+        # if default 404 redirect is specified, do a temporary redirect
+        if redirect_settings.DEFAULT_404_REDIRECT:
+            return http.HttpResponseRedirect(redirect_settings.DEFAULT_404_REDIRECT)
 
         if redirect.redirect_to_url:
             response_class = self.get_response_class(redirect)
