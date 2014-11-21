@@ -25,7 +25,7 @@ pypi package coming soon.  In the mean time, install from the latest tagged vers
 
 3. Run migrations to setup the database models
 
-    $ python manage.py migrate
+        $ python manage.py migrate
 
 # Usage
 In the admin, under the 'Advanced_Redirects' heading you can click on the 'Redirects' link to see the active list of redirects. Any url that generates a 404 response will automatically be added, but you can also manually add redirects. From the change list page you can enter redirect information directly and select the type of response code to use, which can be important for SEO purposes.
@@ -38,7 +38,7 @@ If you click on any redirect url to go to its change form, you will be able to v
 
 And lastly, there are two admin actions available from the drop down on the change list page which allow you to either delete all referers for selected items, or reset their hit counts to zero, which can be useful for testing.
 
-![Admin Actions](https://github.com/eressler/django-advanced-redirects/blob/master/docs/images/admin_actions.png)
+![Admin Actions](https://raw.githubusercontent.com/eressler/django-advanced-redirects/master/docs/images/admin_actions.png)
 
 # Settings
 ### DEFAULT_404_REDIRECT
