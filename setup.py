@@ -9,9 +9,6 @@ CLASSIFIERS = [
     'Operating System :: OS Independent',
     'Topic :: Software Development',
 ]
-install_requires = [
-    'Django>=1.7',
-]
 # taken from django-registration
 # Compile the list of packages available, because distutils doesn't have
 # an easy way to do this.
@@ -44,6 +41,8 @@ setup(
     packages=packages,
     package_data={'advanced_redirects': data_files},
     include_package_data=True,
-    install_requires=install_requires,
+    install_requires=(
+        'Django>=1.7',
+    ),
     classifiers=[],
 )
