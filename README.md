@@ -11,17 +11,17 @@ pypi package coming soon.  In the mean time, install from the latest tagged vers
 # Quick Start
 1. Add 'advanced_redirects' to your installed apps
 
-    INSTALLED_APPS = (
-        ...
-        'advanced_redirects',
-    )
+        INSTALLED_APPS = (
+            ...
+            'advanced_redirects',
+        )
 
 2. Add the redirects middleware to the top of your middleware classes. You want the redirects middleware to be at the top so that it runs first in the request phase.
 
-    MIDDLEWARE_CLASSES = (
-        'advanced_redirects.middleware.AdvancedRedirectMiddleware',
-        ...
-    )
+        MIDDLEWARE_CLASSES = (
+            'advanced_redirects.middleware.AdvancedRedirectMiddleware',
+            ...
+        )
 
 3. Run migrations to setup the database models
 
