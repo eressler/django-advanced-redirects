@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html>
-
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="django-advanced-redirects : Advanced redirect management for Django applications.">
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>django-advanced-redirects</title>
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>django-advanced-redirects by eressler</title>
   </head>
 
   <body>
+    <div id="container">
+      <div class="inner">
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/eressler/django-advanced-redirects">View on GitHub</a>
-
-          <h1 id="project_title">django-advanced-redirects</h1>
-          <h2 id="project_tagline">Advanced redirect management for Django applications.</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/eressler/django-advanced-redirects/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/eressler/django-advanced-redirects/tarball/master">Download this project as a tar.gz file</a>
-            </section>
+        <header>
+          <h1>django-advanced-redirects</h1>
+          <h2>Advanced redirect management for Django applications.</h2>
         </header>
-    </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <p>Advanced redirect management for Django applications. Advanced Redirects tracks all urls routed through your Django app that generate a 404 response and allows you to specify permanent or temporary redirects for them through the admin. It also tracks the referring url based on the HTTP_REFERER property in the request, along with the number of hits and the most recent hit a particular url has had from a specific referrer. You can also manually create your own redirects.</p>
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/eressler/django-advanced-redirects/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/eressler/django-advanced-redirects/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/eressler/django-advanced-redirects" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <p>Advanced redirect management for Django applications. Advanced Redirects tracks all urls routed through your Django app that generate a 404 response and allows you to specify permanent or temporary redirects for them through the admin. It also tracks the referring url based on the HTTP_REFERER property in the request, along with the number of hits and the most recent hit a particular url has had from a specific referrer. You can also manually create your own redirects.</p>
 
 <h1>
 <a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h1>
@@ -72,7 +72,8 @@
 <li>
 <p>Run migrations to setup the database models</p>
 
-<p>$ python manage.py migrate</p>
+<pre><code>$ python manage.py migrate
+</code></pre>
 </li>
 </ol>
 
@@ -99,8 +100,10 @@
 
 <p><em>Default Value: None</em></p>
 
-<p>If the Advanced Redirect Middleware encounters a url that 404's without a specified redirect, it does nothing and allows the remaining middleware to handle it, which will mostly show your site's default 404 page.  However, if you would prefer to make all 404 errors redirect to a specific default url, you can specify that using the DEFAULT_404_REDIRECT setting.
-    DEFAULT_404_REDIRECT = '/search/'</p>
+<p>If the Advanced Redirect Middleware encounters a url that 404's without a specified redirect, it does nothing and allows the remaining middleware to handle it, which will mostly show your site's default 404 page.  However, if you would prefer to make all 404 errors redirect to a specific default url, you can specify that using the DEFAULT_404_REDIRECT setting.</p>
+
+<pre><code>DEFAULT_404_REDIRECT = '/search/'
+</code></pre>
 
 <h1>
 <a id="to-do" class="anchor" href="#to-do" aria-hidden="true"><span class="octicon octicon-link"></span></a>TO DO:</h1>
@@ -109,18 +112,15 @@
 <li>Finish unit tests</li>
 <li>Deploy to Pypi</li>
 </ul>
-      </section>
+        </section>
+
+        <footer>
+          django-advanced-redirects is maintained by <a href="https://github.com/eressler">eressler</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
     </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">django-advanced-redirects maintained by <a href="https://github.com/eressler">eressler</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
   </body>
 </html>
