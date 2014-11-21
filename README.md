@@ -29,16 +29,19 @@ pypi package coming soon.  In the mean time, install from the latest tagged vers
 
 # Usage
 In the admin, under the 'Advanced_Redirects' heading you can click on the 'Redirects' link to see the active list of redirects. Any url that generates a 404 response will automatically be added, but you can also manually add redirects. From the change list page you can enter redirect information directly and select the type of response code to use, which can be important for SEO purposes.
+
 ![Redirects Change List Page](https://raw.githubusercontent.com/eressler/django-advanced-redirects/master/docs/images/change_list.png)
 
 If you click on any redirect url to go to its change form, you will be able to view more detailed information about the redirect url, specifically having to do with the referer of that url. This allows you to identify where dead links are coming from.
+
 ![Redirect Change Form with Referers](https://raw.githubusercontent.com/eressler/django-advanced-redirects/master/docs/images/change_form.png)
 
 And lastly, there are two admin actions available from the drop down on the change list page which allow you to either delete all referers for selected items, or reset their hit counts to zero, which can be useful for testing.
+
 ![Admin Actions](https://github.com/eressler/django-advanced-redirects/blob/master/docs/images/admin_actions.png)
 
 # Settings
-## DEFAULT_404_REDIRECT
+### DEFAULT_404_REDIRECT
 _Default Value: None_
 
 If the Advanced Redirect Middleware encounters a url that 404's without a specified redirect, it does nothing and allows the remaining middleware to handle it, which will mostly show your site's default 404 page.  However, if you would prefer to make all 404 errors redirect to a specific default url, you can specify that using the DEFAULT_404_REDIRECT setting.
