@@ -39,7 +39,7 @@ setup(
     author="Eric Ressler",
     author_email="ericr@smashingideas.com",
     url="https://github.com/eressler/django-advanced-redirects",
-    download_url="https://github.com/eressler/django-advanced-redirects/tarball/0.9",
+    download_url="https://github.com/eressler/django-advanced-redirects/tarball/0.9.2",
     package_dir={'advanced_redirects': 'advanced_redirects'},
     packages=packages,
     package_data={'advanced_redirects': data_files},
