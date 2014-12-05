@@ -4,9 +4,7 @@ Advanced redirect management for Django applications. Advanced Redirects tracks 
     Django >= 1.7
 
 # Installation
-pypi package coming soon.  In the mean time, install from the latest tagged version
-
-    $ pip install -e git://github.com/eressler/django-advanced-redirects.git@0.9#egg=django-advanced-redirects
+    $ pip install django-advanced-redirects
 
 # Quick Start
 1. Add 'advanced_redirects' to your installed apps
@@ -49,4 +47,4 @@ If the Advanced Redirect Middleware encounters a url that 404's without a specif
 
 # TO DO:
 * Finish unit tests
-* Deploy to Pypi
+* Add Django>=1.7 install requirement into setup.py, currently throwing errors on install if this is included.
