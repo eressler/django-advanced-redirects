@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
+
 from . import settings
 
 
@@ -8,14 +10,16 @@ class Redirect (models.Model):
     """
     class Meta:
         ordering = ('originating_url',)
+        verbose_name = _('redirect')
+        verbose_name_plural = _('redirects')
 
     originating_url = models.CharField(
-        max_length=1000,
+        max_length=255,
         unique=True,
         help_text='The originating URL that triggered a 404 error or is manually entered.'
     )
     redirect_to_url = models.CharField(
-        max_length=1000,
+        max_length=255,
         blank=True,
         null=True,
         help_text='Optional. Specify the URL to which the originating URL should redirect. This should be an absolute or root-relative URL.'
@@ -25,6 +29,9 @@ class Redirect (models.Model):
         choices=settings.REDIRECT_CHOICES,
         default=settings.REDIRECT_CHOICES[0][0]
     )
+
+    def __str__(self):
+        return "%s ---> %s" % (self.originating_url, self.redirect_to_url)
 
 
 class Referral (models.Model):
