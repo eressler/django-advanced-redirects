@@ -1,9 +1,14 @@
+import logging
+import re
+
 from django import http
 from django.conf import settings
 from django.utils.timezone import now
 
 from .models import Redirect, Referral
 from . import settings as redirect_settings
+
+logger = logging.getLogger(__name__)
 
 
 class AdvancedRedirectMiddleware(object):
@@ -30,12 +35,31 @@ class AdvancedRedirectMiddleware(object):
         raise NotImplementedError("The 'redirect_type' has not been implemented correctly. "
                                   "The values are specified in advanced_redirects.settings")
 
+    def match_pattern(self, full_path, pattern, placeholder, field):
+        redirect = None
+
+        match = re.match(pattern, full_path)
+        if match:
+            group = match.groupdict()
+            path = placeholder % group
+            try:
+                redirect = Redirect.objects.get(originating_url=path)
+                if field:
+                    redirect.redirect_to_url += group.get(field)
+            except Redirect.DoesNotExist:
+                pass
+
+        return redirect
+
     def process_response(self, request, response):
+
         if response.status_code != 404:
             return response
 
         full_path = request.get_full_path()
         redirect = None
+
+        logger.debug('full_path = %s', full_path)
 
         # check to see if there is an existing redirect for the full path as is
         try:
@@ -62,6 +86,9 @@ class AdvancedRedirectMiddleware(object):
                 redirect = Redirect.objects.get(originating_url=full_path)
             except Redirect.DoesNotExist:
                 pass
+
+        if not redirect and redirect_settings.URL_MATCH:
+            redirect = self.match_pattern(request.get_full_path(), **redirect_settings.URL_MATCH_OPTIONS)
 
         if not redirect:
             # no existing redirect yet, create it now with the original path that was hit

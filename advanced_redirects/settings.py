@@ -13,3 +13,8 @@ REFERER_NONE_VALUE = '(no referer)'
 
 # Optional setting to specify default redirection for 404 hits if no explicit redirect is provided
 DEFAULT_404_REDIRECT = getattr(settings, 'DEFAULT_404_REDIRECT', None)
+
+# Optional setting to check urls pattern
+URL_MATCH = getattr(settings, 'REDIRECT_URL_MATCH', False)
+
+URL_MATCH_OPTIONS = getattr(settings, 'REDIRECT_URL_MATCH_OPTIONS', {})
