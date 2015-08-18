@@ -66,7 +66,7 @@ class AdvancedRedirectMiddleware(object):
 
         # check to see if there is an existing redirect for the full path as is
         try:
-            redirect = Redirect.objects.get(id=url_hash)
+            redirect = Redirect.objects.get(url_hash=url_hash)
         except Redirect.DoesNotExist:
             pass
 
@@ -78,7 +78,7 @@ class AdvancedRedirectMiddleware(object):
             url_hash = hashlib.sha256(full_path.encode('utf-8')).hexdigest()
 
             try:
-                redirect = Redirect.objects.get(id=url_hash)
+                redirect = Redirect.objects.get(url_hash=url_hash)
             except Redirect.DoesNotExist:
                 pass
 
@@ -89,7 +89,7 @@ class AdvancedRedirectMiddleware(object):
             url_hash = hashlib.sha256(full_path.encode('utf-8')).hexdigest()
 
             try:
-                redirect = Redirect.objects.get(id=url_hash)
+                redirect = Redirect.objects.get(url_hash=url_hash)
             except Redirect.DoesNotExist:
                 pass
 

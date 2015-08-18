@@ -15,7 +15,7 @@ class Redirect(models.Model):
         verbose_name = _('redirect')
         verbose_name_plural = _('redirects')
 
-    id = models.CharField(max_length=129, primary_key=True, editable=True)
+    url_hash = models.CharField(max_length=129, unique=True, null=True)
     originating_url = models.CharField(
         max_length=255,
         help_text='The originating URL that triggered a 404 error or is manually entered.'
@@ -37,11 +37,11 @@ class Redirect(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.originating_url = smart_text(self.originating_url)
-        self.id = hashlib.sha256(self.originating_url.encode('utf-8')).hexdigest()
+        self.url_hash = hashlib.sha256(self.originating_url.encode('utf-8')).hexdigest()
         super(Redirect, self).save(force_insert, force_update, using, update_fields)
 
 
-class Referral (models.Model):
+class Referral(models.Model):
     """
     Stores the referer from the request headers that directed to the url that generated a 404 error.
     This can be useful for identifying who is linking to pages that do not exist.

@@ -2,17 +2,17 @@ import hashlib
 
 from django.core.management import BaseCommand
 
-from advanced_redirects.models import Redirect
+from advanced_redirects.models import Redirect, Referral
 
 
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for item in Redirect.objects.all().iterator():
-            new_id = hashlib.sha256(item.originating_url.encode('utf-8')).hexdigest()
-            print 'id:', item.id, '(', new_id, ')'
+            item.url_hash = hashlib.sha256(item.originating_url.encode('utf-8')).hexdigest()
+            item.save()
+            print 'id:', item.id, '(', item.url_hash, ')'
 
-            Redirect.objects.filter(id=item.id).update(id=new_id)
 
         # string_val = "x" * 300
         # r1 = Redirect(originating_url=string_val + '1')
