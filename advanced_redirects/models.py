@@ -1,10 +1,12 @@
+import hashlib
 from django.db import models
+from django.utils.encoding import smart_text
 from django.utils.translation import ugettext_lazy as _
 
 from . import settings
 
 
-class Redirect (models.Model):
+class Redirect(models.Model):
     """
     Store page paths that require redirects to new pages.
     """
@@ -13,9 +15,9 @@ class Redirect (models.Model):
         verbose_name = _('redirect')
         verbose_name_plural = _('redirects')
 
+    id = models.CharField(max_length=129, primary_key=True, editable=True)
     originating_url = models.CharField(
         max_length=255,
-        unique=True,
         help_text='The originating URL that triggered a 404 error or is manually entered.'
     )
     redirect_to_url = models.CharField(
@@ -31,7 +33,12 @@ class Redirect (models.Model):
     )
 
     def __str__(self):
-        return "%s ---> %s" % (self.originating_url, self.redirect_to_url)
+        return "%s ---> %s" % (self.originating_url[:50], self.redirect_to_url)
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.originating_url = smart_text(self.originating_url)
+        self.id = hashlib.sha256(self.originating_url.encode('utf-8')).hexdigest()
+        super(Redirect, self).save(force_insert, force_update, using, update_fields)
 
 
 class Referral (models.Model):
