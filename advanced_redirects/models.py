@@ -32,8 +32,12 @@ class Redirect(models.Model):
         default=settings.REDIRECT_CHOICES[0][0]
     )
 
-    def __str__(self):
-        return "%s ---> %s" % (self.originating_url[:50], self.redirect_to_url)
+    def __unicode__(self):
+        try:
+            ret = "%s ---> %s" % (self.originating_url[:50], self.redirect_to_url)
+        except UnicodeEncodeError:
+            ret = self.url_hash
+        return ret
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.originating_url = smart_text(self.originating_url)
@@ -71,3 +75,6 @@ class Referral(models.Model):
         self.hits = 0
         self.last_hit = None
         self.save()
+
+    def __unicode__(self):
+        return '%d' % self.id
