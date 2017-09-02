@@ -1,19 +1,29 @@
-from distutils.core import setup
+import os
+
+from setuptools import find_packages, setup
 
 VERSION = __import__("advanced_redirects").__version__
 
+with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
+    README = readme.read()
+
+# allow setup.py to be run from any path
+os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
+
 setup(
-    name='django-advanced-redirects',
-    packages=['advanced_redirects'],
+    name='ws-advanced-redirects',
     version=VERSION,
-    description='Advanced redirect management for Django applications.',
-    author='Eric Ressler',
-    author_email='eric@ericressler.com',
-    url='http://eressler.github.io/django-advanced-redirects/',
-    download_url="https://github.com/eressler/django-advanced-redirects/tarball/{0}".format(VERSION),
-    keywords=['django', 'redirects', 'seo'],
-    classifiers=[],
-    install_requires=[
-        'django>=1.7.4'
-    ]
+    packages=find_packages(),
+    include_package_data=True,
+    description='Advanced redirect management for wheel-size site.',
+    long_description=README,
+    url='https://github.com/sorlandet/django-advanced-redirects/',
+    author='Evgeniy Medvedev',
+    author_email='yevgeniy.medvedev@gmail.com',
+    classifiers=[
+        'Framework :: Django :: 1.8',  # replace "X.Y" as appropriate
+        'Intended Audience :: Wheel-Size Developers',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 2.7',
+    ],
 )
