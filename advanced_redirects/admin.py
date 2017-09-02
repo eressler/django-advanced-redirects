@@ -26,13 +26,17 @@ class HasRedirectListFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         return (
-            (False, 'Yes'),
-            (True, 'No')
+            ('1', 'Yes'),
+            ('0', 'No')
         )
 
     def queryset(self, request, queryset):
-        if self.value():
-            return queryset.filter(redirect_to_url__isnull=self.value())
+
+        if self.value() == '1':
+            return queryset.filter(redirect_to_url__isnull=False)
+
+        if self.value() == '0':
+            return queryset.filter(Q(redirect_to_url__isnull=True) | Q(redirect_to_url__exact=''))
 
 
 class ReferralInlineAdmin(admin.TabularInline):
