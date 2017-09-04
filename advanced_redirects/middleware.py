@@ -1,9 +1,15 @@
+import hashlib
+import logging
+import re
+
 from django import http
 from django.conf import settings
 from django.utils.timezone import now
 
 from .models import Redirect, Referral
 from . import settings as redirect_settings
+
+logger = logging.getLogger(__name__)
 
 
 class AdvancedRedirectMiddleware(object):
@@ -30,16 +36,37 @@ class AdvancedRedirectMiddleware(object):
         raise NotImplementedError("The 'redirect_type' has not been implemented correctly. "
                                   "The values are specified in advanced_redirects.settings")
 
+    def match_pattern(self, full_path, pattern, placeholder, field):
+        redirect = None
+
+        match = re.match(pattern, full_path)
+        if match:
+            group = match.groupdict()
+            path = placeholder % group
+            try:
+                redirect = Redirect.objects.get(originating_url=path)
+                if field:
+                    redirect.redirect_to_url += group.get(field)
+            except Redirect.DoesNotExist:
+                pass
+
+        return redirect
+
     def process_response(self, request, response):
+
         if response.status_code != 404:
             return response
 
         full_path = request.get_full_path()
+        url_hash = hashlib.sha256(full_path.encode('utf-8')).hexdigest()
+
         redirect = None
+
+        logger.debug('full_path = %s', full_path)
 
         # check to see if there is an existing redirect for the full path as is
         try:
-            redirect = Redirect.objects.get(originating_url=full_path)
+            redirect = Redirect.objects.get(url_hash=url_hash)
         except Redirect.DoesNotExist:
             pass
 
@@ -48,9 +75,10 @@ class AdvancedRedirectMiddleware(object):
             # This scenario should never be reached because CommonMiddleware adds the slash beforehand
             path_len = len(request.path)
             full_path = full_path[:path_len] + '/' + full_path[path_len:]
+            url_hash = hashlib.sha256(full_path.encode('utf-8')).hexdigest()
 
             try:
-                redirect = Redirect.objects.get(originating_url=full_path)
+                redirect = Redirect.objects.get(url_hash=url_hash)
             except Redirect.DoesNotExist:
                 pass
 
@@ -58,10 +86,15 @@ class AdvancedRedirectMiddleware(object):
         if not redirect and request.path.endswith('/'):
             # try removing the trailing slash to see if a redirect is found
             full_path = request.path[:-1]
+            url_hash = hashlib.sha256(full_path.encode('utf-8')).hexdigest()
+
             try:
-                redirect = Redirect.objects.get(originating_url=full_path)
+                redirect = Redirect.objects.get(url_hash=url_hash)
             except Redirect.DoesNotExist:
                 pass
+
+        if not redirect and redirect_settings.URL_MATCH:
+            redirect = self.match_pattern(request.get_full_path(), **redirect_settings.URL_MATCH_OPTIONS)
 
         if not redirect:
             # no existing redirect yet, create it now with the original path that was hit
@@ -82,6 +115,9 @@ class AdvancedRedirectMiddleware(object):
         if redirect.redirect_to_url:
             response_class = self.get_response_class(redirect)
             return response_class(redirect.redirect_to_url)
+
+        if redirect.redirect_type == redirect_settings.GONE_REDIRECT_VALUE:
+            return http.HttpResponseGone('The requested resource is no longer available at the server and no forwarding address is known.')
 
         # show the 404 page
         return response

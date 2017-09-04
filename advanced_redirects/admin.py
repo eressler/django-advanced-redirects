@@ -26,16 +26,20 @@ class HasRedirectListFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         return (
-            (False, 'Yes'),
-            (True, 'No')
+            ('1', 'Yes'),
+            ('0', 'No')
         )
 
     def queryset(self, request, queryset):
-        if self.value():
-            return queryset.filter(redirect_to_url__isnull=self.value())
+
+        if self.value() == '1':
+            return queryset.filter(redirect_to_url__isnull=False)
+
+        if self.value() == '0':
+            return queryset.filter(Q(redirect_to_url__isnull=True) | Q(redirect_to_url__exact=''))
 
 
-class ReferralInlineAdmin (admin.TabularInline):
+class ReferralInlineAdmin(admin.TabularInline):
     """
     Non-editable inline displays the referrals information.
     """
@@ -49,7 +53,8 @@ class ReferralInlineAdmin (admin.TabularInline):
         return ['referer_url', 'hits', 'last_hit']
 
 
-class RedirectAdmin (admin.ModelAdmin):
+@admin.register(Redirect)
+class RedirectAdmin(admin.ModelAdmin):
     """
     The main admin functionality for the Redirects model. Slightly customized.
     """
@@ -58,11 +63,17 @@ class RedirectAdmin (admin.ModelAdmin):
 
     form = RedirectAdminForm
     fields = ('originating_url', 'redirect_to_url', 'redirect_type',)
-    list_display = ('originating_url', 'redirect_to_url', 'redirect_type',)
+    list_display = ('get_originating_url', 'redirect_to_url', 'redirect_type', 'get_hits')
     list_editable = ('redirect_to_url', 'redirect_type')
     list_filter = (HasRedirectListFilter,)
     search_fields = ('originating_url', 'redirect_to_url')
     inlines = (ReferralInlineAdmin,)
     actions = [delete_referers, reset_referer_hit_counts]
 
-admin.site.register(Redirect, RedirectAdmin)
+    def get_originating_url(self, obj):
+        return "%s" % obj.originating_url[:100]
+    get_originating_url.short_description = 'URL'
+
+    def get_hits(self, obj):
+        """Return referrals quantity for the instance."""
+        return sum(obj.referrals.all().values_list('hits', flat=True))
