@@ -13,4 +13,7 @@ setup(
     download_url="https://github.com/eressler/django-advanced-redirects/tarball/{0}".format(VERSION),
     keywords=['django', 'redirects', 'seo'],
     classifiers=[],
+    install_requires=[
+        'django>=1.7.4'
+    ]
 )

@@ -14,8 +14,8 @@ class Migration(migrations.Migration):
             name='Redirect',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('originating_url', models.CharField(help_text=b'The originating URL that triggered a 404 error or is manually entered.', unique=True, max_length=1000)),
-                ('redirect_to_url', models.CharField(help_text=b'Optional. Specify the URL to which the originating URL should redirect. This should be an absolute or root-relative URL.', max_length=1000, null=True, blank=True)),
+                ('originating_url', models.CharField(help_text=b'The originating URL that triggered a 404 error or is manually entered.', unique=True, max_length=255)),
+                ('redirect_to_url', models.CharField(help_text=b'Optional. Specify the URL to which the originating URL should redirect. This should be an absolute or root-relative URL.', max_length=255, null=True, blank=True)),
                 ('redirect_type', models.CharField(default=b'301', max_length=10, choices=[(b'301', b'301 - Permanent'), (b'302', b'302 - Temporary')])),
             ],
             options={
